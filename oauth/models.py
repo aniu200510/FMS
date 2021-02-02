@@ -11,7 +11,7 @@ class User(AbstractUser):
 
 class FundCompany(models.Model):
     name = models.CharField(
-        _('name'), help_text='名称', max_length=64)
+        _('name'), help_text='名称', unique=True, max_length=64)
 
     def __str__(self):
         return self.name
@@ -46,7 +46,7 @@ class Fund(models.Model):
     name = models.CharField(
         _('name'), help_text='名称', unique=True, max_length=64)
     code = models.CharField(
-        _('name'), help_text='基金代码', unique=True, max_length=32)
+        _('code'), help_text='基金代码', unique=True, max_length=32)
     type = models.CharField(
         _('type'), help_text='基金类型', max_length=32)
     scale = models.FloatField(
@@ -89,6 +89,14 @@ class FundAccount(models.Model):
         null=True,
         on_delete=models.PROTECT)
 
+    def __str__(self):
+        fmt_str = ''
+        if self.fund:
+            fmt_str = str(self.date) + ' ' + self.fund.name
+
+        return fmt_str
+
     class Meta:
         verbose_name = _('fund account')
         db_table = 'fund_account'
+        ordering = ['-date']
