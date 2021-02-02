@@ -1,0 +1,18 @@
+[Unit]
+Description=celery daemon
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/opt/cfiec/fms/
+ExecStart=/opt/cfiec/fms/.venv/bin/celery -A fms worker -B -l error -Q celery
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=always
+RestartSec=3s
+
+[Install]
+WantedBy=multi-user.target
+Alias=celery.service
+
