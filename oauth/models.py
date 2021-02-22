@@ -155,3 +155,4 @@ class FundNet(models.Model):
         verbose_name = _('fund net')
         db_table = 'fund_net'
         ordering = ['-date']
+        unique_together = ('date', 'fund')
