@@ -100,6 +100,7 @@ class FundAccount(models.Model):
         verbose_name = _('fund account')
         db_table = 'fund_account'
         ordering = ['-date']
+        unique_together = ('date', 'fund')
 
 
 class FundTrade(models.Model):
