@@ -45,6 +45,8 @@ class FundManager(models.Model):
 class Fund(models.Model):
     name = models.CharField(
         _('name'), help_text='名称', unique=True, max_length=64)
+    abbr = models.CharField(
+        _('abbreviation'), help_text='缩写', max_length=64, default='')
     code = models.CharField(
         _('code'), help_text='基金代码', unique=True, max_length=32)
     type = models.CharField(
