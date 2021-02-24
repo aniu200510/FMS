@@ -7,6 +7,9 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+# 基金列表
+FUND_URL = 'http://fund.eastmoney.com/js/fundcode_search.js'
+
 # 基金历史净值URL
 LSJZ_URL = 'http://fund.eastmoney.com/f10/F10DataApi.aspx?'\
     'type=lsjz&code={0}&page={1}&sdate={2}&edate={3}&per={4}'
@@ -15,11 +18,34 @@ LSJZ_URL = 'http://fund.eastmoney.com/f10/F10DataApi.aspx?'\
 RT_URL = 'http://fundgz.1234567.com.cn/js/{code}.js?rt=1463558676006'
 
 
+class FundSplider:
+
+    def get_html(self, timeout=10):
+        r = requests.get(FUND_URL, timeout=timeout)
+        html = r.text
+        return html
+
+    def get(self):
+        html = self.get_html()
+        text = html[10:-2]
+        data = []
+        for s in text.split('],'):
+            if not s.startswith('['):
+                s = '[' + s
+
+            if not s.endswith(']'):
+                s = s + ']'
+
+            data.append(eval(s))
+
+        return data
+
+
 class FundNetSplider:
 
-    def get_html(self, code, sdate, edate, page=1, per=20):
+    def get_html(self, code, sdate, edate, page=1, per=20, timeout=30):
         url = LSJZ_URL.format(code, page, sdate, edate, per)
-        r = requests.get(url)
+        r = requests.get(url, timeout=timeout)
         html = r.text
         return html
 
@@ -75,9 +101,9 @@ class FundNetSplider:
 
 class FundRTSplider:
 
-    def get_html(self, code):
+    def get_html(self, code, timeout=10):
         url = RT_URL.format(code=code)
-        r = requests.get(url)
+        r = requests.get(url, timeout=timeout)
         html = r.text
         return html
 
