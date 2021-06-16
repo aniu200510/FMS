@@ -32,4 +32,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/v1/', include(router.urls)),
     url(r'^api-token-auth/', obtain_auth_token),
+    url(r'demo/', include('demo.urls'))
 ]
