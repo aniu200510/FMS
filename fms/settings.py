@@ -36,7 +36,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
 }
@@ -170,6 +171,18 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'oauth.User'
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'lzhy200510@163.com'
+EMAIL_HOST_PASSWORD = 'KAFIVNMRZUKVAHSF'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_FROM = 'lzhy200510@163.com'
+EMAIL_SUBJECT = "【告警】"
+
+RECIPIENT_LIST = ['zyli@cfiec.net']
 
 LANGUAGE_CODE = 'en-us'
 
