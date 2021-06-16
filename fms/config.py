@@ -15,14 +15,14 @@ CELERYBEAT_SCHEDULE = {}
 
 # timedelta 和 crontab 各有不同应用场景
 CELERYBEAT_SCHEDULE = {
-    'check-ban-policy': {
-        'task': 'das.tasks.save_fund_net_every_day',
+    'save-fund-net-every-day': {
+        'task': 'das.tasks.save_fund_net_by_day',
         'schedule': crontab(hour='*/1', minute=0),
-        'args': (1, ),  # 第一个参数必须和crontab的hour参数间隔时长一致
+        'args': (7, ),  # 第一个参数必须和crontab的hour参数间隔时长一致
     },
-    'save-core-indicator-every-hour': {
-        'task': 'CfiecDns.cfiec_dns.tasks.crontab_core_indicator',
+    'save-fund-account-every-day': {
+        'task': 'das.tasks.save_fund_account_by_day',
         'schedule': crontab(minute=10),
-        'args': []
+        'args': (1, ),
     },
 }
