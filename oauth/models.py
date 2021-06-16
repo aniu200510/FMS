@@ -2,8 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
-
 
 class User(AbstractUser):
     pass
@@ -103,38 +101,6 @@ class FundAccount(models.Model):
         db_table = 'fund_account'
         ordering = ['-date']
         unique_together = ('date', 'fund')
-
-
-class FundTrade(models.Model):
-    date = models.DateField(
-        _('date'), help_text='日期')
-    commission = models.FloatField(
-        _('commission'), help_text='手续费')
-    share = models.FloatField(
-        _('fund share'), help_text='基金份额')
-    principal = models.FloatField(
-        _('principal'), help_text='本金')
-    amount = models.FloatField(
-        _('amount'), help_text='金额')
-    fund = models.ForeignKey(
-        Fund,
-        related_name='ref_fund_by_fund_trade',
-        default=None,
-        blank=True,
-        null=True,
-        on_delete=models.PROTECT)
-
-    def __str__(self):
-        fmt_str = ''
-        if self.fund:
-            fmt_str = str(self.date) + ' ' + self.fund.name
-
-        return fmt_str
-
-    class Meta:
-        verbose_name = _('fund trade')
-        db_table = 'fund_trade'
-        ordering = ['-date']
 
 
 class FundNet(models.Model):
