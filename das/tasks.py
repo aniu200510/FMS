@@ -1,6 +1,11 @@
 from datetime import date, timedelta
 
+from django.conf import settings
+from django.core.mail import send_mail
+
+from das.crawler import FundRTSplider
 from das.db import save_fund_net
+from das.monitor import BuyPointMonitor
 from fms.celery import app
 from oauth.models import Fund, FundAccount, FundNet
 
@@ -33,3 +38,25 @@ def save_fund_account_by_day():
                                               fund_net=net.nav,
                                               share=q.share,
                                               fund=q.fund)
+
+
+@app.task
+def monitoring_fund_buy_point():
+    monitor = BuyPointMonitor()
+    messages = list()
+    for cfg in monitor.conf:
+        try:
+            data = FundRTSplider().get(cfg['code'])
+        except Exception:
+            continue
+
+        dvalue = monitor.check(cfg['code'], float(data['gsz']))
+        if bool(dvalue):
+            messages.append(monitor.msg(cfg['code'], dvalue))
+
+    if messages:
+        send_mail("【FUND BUY POINT】",
+                  '\n'.join(messages),
+                  settings.EMAIL_FROM,
+                  settings.RECIPIENT_LIST,
+                  fail_silently=False)

@@ -23,6 +23,11 @@ CELERYBEAT_SCHEDULE = {
     'save-fund-account-every-day': {
         'task': 'das.tasks.save_fund_account_by_day',
         'schedule': crontab(minute=10),
-        'args': (1, ),
+        'args': (),
+    },
+    'monitoring_fund_buy_point': {
+        'task': 'das.tasks.monitoring_fund_buy_point',
+        'schedule': crontab(minute='30,50', hour=14),
+        'args': (),
     },
 }
