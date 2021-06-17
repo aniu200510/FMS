@@ -1,5 +1,5 @@
 [Unit]
-Description=celery daemon
+Description=fms daemon
 After=network.target
 
 [Service]
@@ -14,5 +14,5 @@ RestartSec=3s
 
 [Install]
 WantedBy=multi-user.target
-Alias=celery.service
+Alias=fms.service
 
