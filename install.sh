@@ -9,7 +9,7 @@ pro='/opt/cfiec/'
 python_home=`which python3`
 
 
-initPro(){
+init_pro(){
 	if [ ! -d ${pro} ];
 	then
 		sudo mkdir -p ${pro} >/dev/null
@@ -35,7 +35,7 @@ env_virtual(){
 }
 
 
-cpPy() {
+cp_py() {
     # rsync all source code
     rsync -avz  --exclude .git/ --exclude tmp/ . ${pro_root}
 }
@@ -51,14 +51,46 @@ create_db(){
 }
 
 celery(){
-    sudo cp ./etc/fund.service /etc/systemd/system/ >/dev/null
+    sudo cp ./etc/fms.service /etc/systemd/system/ >/dev/null
     sudo systemctl daemon-reload
-    sudo systemctl enable celery >/dev/null 2>&1
-    sudo systemctl restart celery >/dev/null 
+    sudo systemctl enable fms >/dev/null 2>&1
+    sudo systemctl restart fms.service >/dev/null 
 }
 
-initPro
-cpPy
-env_virtual
-create_db
-celery
+help(){
+	echo "usage: $0 help"
+	echo "       $0 (all|update|single)"
+	cat <<EOF
+
+	help       - this screen
+	update     - update the pyc only
+	all        - install first time all in
+EOF
+}
+
+
+case "$1" in
+    update)
+        cp_py
+        migrate
+        ;;
+    dev)
+        init_pro
+        cp_py
+        env_virtual
+        create_db
+        celery
+        ;;
+    all)
+        init_pro
+        cp_py
+        env_virtual
+        create_db
+        celery
+        ;;
+    *)
+        help
+        ;;
+esac
+
+echo "...install end"
